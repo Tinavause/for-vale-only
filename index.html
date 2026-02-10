@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Something from me to you 🫶</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%92%8C%3C/text%3E%3C/svg%3E">
+
+
+  <style>
+    :root{
+      /* Maroon theme */
+      --bg1:#2b0a0f;      /* deep maroon-black */
+      --bg2:#6f1220;      /* rich maroon */
+      --card:#ffffffd6;   /* soft glass card */
+      --text:#1f1f1f;
+      --soft:#ffffff8a;
+
+      --btn:#7a0f1f;      /* maroon button */
+      --btn2:#b11b34;     /* brighter maroon accent */
+
+      --shadow: 0 20px 50px rgba(0,0,0,.18);
+      --radius: 18px;
+      --border: 1px solid rgba(255,255,255,.55);
+    }
+
+    .flag-img{
+      width: 18px;
+	  height: 18px;
+	  vertical-align: -3px;
+	  margin-left: 4px;
+    }
+	
+	/* Hint fade (pre-video hint only) */
+.hint-fade{
+  opacity: 0 !important;
+  transform: translateY(-2px);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+	
+	@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  45% { transform: scale(0.98); }
+  65% { transform: scale(1.06); }
+}
+
+@keyframes waitingPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Page starts invisible */
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
+              radial-gradient(900px 700px at 80% 20%, rgba(255,255,255,.08), transparent 55%),
+              linear-gradient(135deg, var(--bg1), var(--bg2));
+  opacity: 1; /* SAFE default */
+}
+
+body.page-loaded{
+  animation: pageFadeIn 900ms ease forwards;
+}
+
+
+#openBtn.waiting{
+  animation: waitingPulse 2.8s ease-in-out infinite;
+}
+
+/* One-time beat pulse (used for syncing Play + countdown heart) */
+.beat-once{
+  animation: beat 1.15s ease-in-out 1;
+}
+
+.btn.beating{
+  animation: beat 1.15s ease-in-out infinite;
+}
+
+.btn.beating-soft{
+  animation: beat 1.35s ease-in-out infinite;
+}
+
+.heart-burst{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+
+/* Don't pulse when disabled */
+.btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  animation:none !important;
+}
+
+
+@keyframes syncedPulse {
+  0%, 75%, 100% {
+    transform: scale(1);
+    opacity: .75;
+  }
+  82% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  90% {
+    transform: scale(0.97);
+    opacity: .9;
+  }
+}
+
+/* Cover fade-out */
+.screen.fade-out{
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+/* ===== CUTER COVER (still maroon + classy) ===== */
+
+#cover{
+  justify-content:center;
+}
+
+/* Only show cover when it's the active screen */
+#cover.screen.active{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;   /* adds true centering */
+  min-height: 560px;
+  text-align:center;
+}
+
+.coverInner{
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.coverAura{
+  position:absolute;
+  inset:-40px;
+  pointer-events:none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(177,27,52,.18), transparent 42%),
+    radial-gradient(circle at 82% 22%, rgba(122,15,31,.14), transparent 48%),
+    radial-gradient(circle at 72% 78%, rgba(177,27,52,.12), transparent 45%),
+    radial-gradient(circle at 26% 78%, rgba(122,15,31,.10), transparent 46%);
+  filter: blur(2px);
+}
+
+.coverGlow{
+  position:absolute;
+  left:50%;
+  top:220px;
+  width: 520px;
+  height: 260px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(122,15,31,.16), transparent 60%);
+  pointer-events:none;
+  z-index: 1;
+}
+
+.coverTitle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  text-align:center;
+}
+
+.coverTitle .emoji{
+  font-size: 30px;
+  filter: drop-shadow(0 8px 18px rgba(122,15,31,.18));
+}
+
+.coverLine{
+ margin-top:10px;
+}
+
+.coverSub{
+  margin-top:8px;
+}
+
+/* little “sparkle dust” */
+.dustRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:16px;
+  opacity:.75;
+  margin-left: 6px;
+}
+.dustDot{
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background: rgba(122,15,31,.35);
+  box-shadow: 0 10px 18px rgba(122,15,31,.10);
+}
+.dustStar{
+  font-size: 13px;
+  opacity:.85;
+}
+
+/* floating hearts */
+.coverFloat{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index: 1;
+  overflow:hidden;
+  border-radius: var(--radius);
+}
+
+.floatH{
+  position:absolute;
+  font-size: 16px;
+  opacity: .22;
+  color: rgba(122,15,31,.9);
+  animation: floaty 8.5s ease-in-out infinite;
+  filter: drop-shadow(0 10px 16px rgba(122,15,31,.10));
+}
+.floatH:nth-child(2){ left: 76%; top: 18%; animation-duration: 10.5s; opacity:.18; }
+.floatH:nth-child(3){ left: 22%; top: 64%; animation-duration: 9.6s; opacity:.20; }
+.floatH:nth-child(4){ left: 64%; top: 70%; animation-duration: 11.2s; opacity:.16; }
+
+@keyframes floaty{
+  0%,100%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-10px) scale(1.05); }
+}
+
+/* button: richer + “halo” */
+#openBtn{
+  position: relative;
+  padding: 13px 18px;
+  border-radius: 16px;
+  box-shadow:
+    0 18px 36px rgba(122,15,31,.28),
+    0 0 0 6px rgba(122,15,31,.06);
+}
+#openBtn::after{
+  content:"";
+  position:absolute;
+  inset:-18px;
+  border-radius: 22px;
+  background: radial-gradient(circle, rgba(177,27,52,.18), transparent 65%);
+  opacity: .9;
+  z-index:-1;
+}
+
+/* tiny “press” hint */
+.coverHint{
+  margin-top: 10px;
+  font-size: 12px;
+  opacity:.65;
+}
+
+@keyframes onePulse{
+  0%   { transform: scale(1);   opacity:.65; }
+  25%  { transform: scale(1.18); opacity:1; }
+  45%  { transform: scale(0.98); opacity:.9; }
+  65%  { transform: scale(1.10); opacity:1; }
+  100% { transform: scale(1);   opacity:.9; }
+}
+
+    *{box-sizing:border-box}
+
+    .wrap{
+      width:min(980px, 92vw);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 880px){
+      .wrap{grid-template-columns:1fr; gap:14px;}
+    }
+    .card{
+      border:var(--border);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:18px 18px 16px;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+
+      /* Creamy card look */
+      background: rgba(255,248,240,.92);
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-40px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 45%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,.35), transparent 50%);
+      pointer-events:none;
+    }
+
+    h1,h2,p{margin:0 0 10px}
+    h1{font-size: clamp(22px, 3vw, 34px); letter-spacing:.2px}
+    h2{font-size: clamp(18px, 2.4vw, 22px); opacity:.95}
+    p{line-height:1.4}
+    .muted{opacity:.75}
+
+    .btn{
+      border:none;
+      background: linear-gradient(135deg, var(--btn), var(--btn2));
+      color:white;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 12px 22px rgba(122,15,31,.28);
+      transition: transform .06s ease;
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.secondary{
+      background: rgba(255,255,255,.75);
+      color: var(--text);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: none;
+      font-weight:700;
+    }
+
+    .pill{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(0,0,0,.06);
+  font-weight:700;
+  margin:8px 0 10px;
+  width:100%;
+}
+
+.pillLeft{ text-align:left; white-space:nowrap; }
+.pillRight{ text-align:right; white-space:nowrap; }
+
+.pillLeft, .pillRight { 
+  min-width: 0; 
+}
+
+@media (max-width: 480px){
+  .pill{
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto;
+  }
+  .pillRight{ grid-column:auto; text-align:right; }
+}
+
+@media (max-width: 420px){
+  .pill{ font-size: 13px; gap:8px; padding:8px 10px; }
+  .flag-img{ width:16px; height:16px; }
+}
+
+    .stamps{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .stamp{
+      width:44px; height:44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.06);
+      display:grid; place-items:center;
+      font-size: 20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .stamp.done{
+      background: rgba(255,255,255,.92);
+      border-color: rgba(122,15,31,.22);
+      color: #7a0f1f;
+    }
+    .stamp.done::after{
+      content:"";
+      position:absolute; inset:-20px;
+      background: radial-gradient(circle at 30% 30%, rgba(122,15,31,.12), transparent 45%);
+    }
+
+    .spark{
+      position:absolute;
+      font-size: 14px;
+      animation: pop .8s ease forwards;
+      pointer-events:none;
+      filter: drop-shadow(0 8px 8px rgba(0,0,0,.08));
+    }
+    @keyframes pop{
+      0%{transform: translateY(8px) scale(.8); opacity:0}
+      30%{opacity:1}
+      100%{transform: translateY(-26px) scale(1.15); opacity:0}
+    }
+
+    /* Screen system */
+    .screen{display:none; position:relative; z-index:1; width:100%;}
+	.screen.active{display:block;}
+
+    .choices{display:grid; gap:10px; margin-top:12px;}
+    .choice{	
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 14px;
+      padding:12px 12px;
+      cursor:pointer;
+      font-weight:700;
+      transition: transform .08s ease;
+	  outline: none;
+	  box-shadow: none;
+    }
+	
+	/* Prevent focus ring on click / load */
+.choice:focus,
+.choice:focus-visible{
+  outline: none;
+  box-shadow: none;
+}
+	
+    .choice:active{transform: scale(.99)}
+    .choice.good{
+  outline: 2px solid rgba(122,15,31,.18);
+  box-shadow: 0 0 0 3px rgba(122,15,31,.06);
+}
+    .choice.bad{outline: 2px solid rgba(255,0,70,.22)}
+
+    .note{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.06);
+      display:none;
+    }
+    .note.show{display:block}
+
+	/* === LIVELIER THAILAND COUNTDOWN (maroon theme) === */
+
+.card.side{
+  background: rgba(255,248,240,.94);
+}
+
+/* Give the whole countdown area a soft maroon “aura” */
+.side .countdownWrap{
+  position: relative;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(122,15,31,.10), rgba(177,27,52,.06));
+  border: 1px solid rgba(122,15,31,.12);
+  box-shadow: 0 18px 34px rgba(43,10,15,.12);
+  overflow: hidden;
+}
+
+/* Tiny decorative sparkles (subtle) */
+.side .countdownWrap::before{
+  content:"";
+  position:absolute; inset:-30px;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(177,27,52,.14), transparent 42%),
+    radial-gradient(circle at 78% 18%, rgba(122,15,31,.12), transparent 45%),
+    radial-gradient(circle at 72% 78%, rgba(177,27,52,.10), transparent 42%);
+  pointer-events:none;
+}
+
+/* Make the boxes look more premium and lively */
+.side .cdBox{
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
+  border: 1px solid rgba(122,15,31,.10);
+  box-shadow: 0 12px 20px rgba(43,10,15,.08);
+  border-radius: 18px;
+  padding: 12px 10px;
+}
+
+/* Numbers: maroon, bold, slightly glowing */
+.side .cdNum{
+  font-size: 22px;
+  font-weight: 950;
+  letter-spacing: .5px;
+  color: #7a0f1f;
+  text-shadow: 0 8px 18px rgba(122,15,31,.18);
+}
+
+/* Labels: a bit clearer */
+.side .cdLbl{
+  font-size: 12px;
+  opacity: .78;
+}
+
+/* Make the emotional sentence feel like a “message card” */
+.side #meetText{
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(122,15,31,.10);
+  box-shadow: 0 14px 26px rgba(43,10,15,.07);
+  border-radius: 18px;
+}
+
+/* Optional: a tiny animated shimmer (very subtle) */
+@keyframes softShimmer{
+  0%{ transform: translateX(-20%); opacity:.0; }
+  30%{ opacity:.22; }
+  100%{ transform: translateX(120%); opacity:0; }
+}
+.side .countdownWrap::after{
+  content:"";
+  position:absolute;
+  top:0; left:-40%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-12deg);
+  animation: softShimmer 4.5s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.coverTitle .emoji{
+  animation: onePulse 1.25s ease-in-out 1;
+}
+
+    /* Tiles */
+    .tiles{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .tile{
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.06);
+      display:grid; place-items:center;
+      font-size: 22px;
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .tile.revealed{
+      background: rgba(255,255,255,.92);
+      border-color: rgba(122,15,31,.22);
+      box-shadow: 0 0 0 2px rgba(122,15,31,.18);
+    }
+
+    /* Catch hearts */
+    .catchArea{
+      position:relative;
+      height: 240px;
+      margin-top:12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+    .floatHeart{
+      position:absolute;
+      bottom:-40px;
+      font-size: 22px;
+      cursor:pointer;
+      user-select:none;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,.12));
+    }
+    @keyframes floatUp{
+      from { transform: translateY(0); opacity: 0 }
+      8% { opacity: 1 }
+      to   { transform: translateY(-320px); opacity: 0 }
+    }
+
+    .footerRow{
+      display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+    /* Right panel */
+    .side h2{margin-bottom:6px}
+    .countdown{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    .cdBox{
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      padding:10px 10px;
+      text-align:center;
+    }
+    .cdNum{font-size: 20px; font-weight:900}
+    .cdLbl{font-size: 12px; opacity:.75; margin-top:2px}
+    .small{
+      font-size: 12.5px;
+      opacity:.75;
+      margin-top:10px;
+    }
+    .tiny{font-size:12px; opacity:.7}
+	/* Base state for pre-video hint */
+#preVideoHint{
+  opacity: .85;
+  transform: none;
+}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- MAIN GAME CARD -->
+    <div class="card">
+	<!-- Screen: Cover -->
+<div id="cover" class="screen active">
+  <div class="coverAura"></div>
+  <div class="coverGlow"></div>
+
+  <div class="coverFloat" aria-hidden="true">
+    <span class="floatH" style="left:14%; top:22%;">♡</span>
+    <span class="floatH">♡</span>
+    <span class="floatH">♡</span>
+    <span class="floatH">♡</span>
+  </div>
+
+  <div class="coverInner">
+    <div class="coverTitle">
+      <h1 style="margin:0;">A little surprise</h1>
+      <span class="emoji">🫶</span>
+    </div>
+
+    <p class="coverLine">
+      I made this little thing for you - something sweet to open while we’re counting down to Thailand.
+    </p>
+
+    <p class="coverSub">
+      No rush. Just… open it when you’re ready.
+    </p>
+
+    <div class="dustRow" aria-hidden="true">
+      <span class="dustStar">✦</span><span class="dustDot"></span>
+      <span class="dustStar">✧</span><span class="dustDot"></span>
+      <span class="dustStar">✦</span>
+    </div>
+
+    <div class="footerRow" style="justify-content:center; margin-top:26px;">
+      <button class="btn waiting" id="openBtn">Open it 💌</button>
+    </div>
+
+    <div class="coverHint" style="text-align:center;">
+      (tiny surprise inside)
+    </div>
+  </div>
+</div>
+
+      <!-- Screen: Start -->
+      <div id="s0" class="screen">
+        <h1>Hi Vale 💘</h1>
+        <p class="muted">Almost a year of talking… and now we’re almost there.</p>
+
+        <div class="pill">
+  <span class="pillLeft">Thailand countdown</span>
+  <img class="flag-img" alt="Thailand" src="https://twemoji.maxcdn.com/v/latest/svg/1f1f9-1f1ed.svg">
+  <span class="pillRight">+ 4 hearts to unlock</span>
+</div>
+
+
+        <p style="margin-top:6px">Ready to play a tiny sweet game made just for you?</p>
+
+        <div class="footerRow">
+          <button class="btn beating-soft" id="startBtn">Start</button>
+          <button class="btn secondary" id="resetBtn" title="Resets progress">Reset</button>
+        </div>
+
+        <div class="stamps" aria-label="progress stamps">
+          <div class="stamp" id="st1" title="Heart 1">♡</div>
+          <div class="stamp" id="st2" title="Heart 2">♡</div>
+          <div class="stamp" id="st3" title="Heart 3">♡</div>
+          <div class="stamp" id="st4" title="Heart 4">♡</div>
+        </div>
+      </div>
+
+      <!-- Screen: Level 1 -->
+      <div id="s1" class="screen">
+        <h2>Level 1: One correct answer 😌</h2>
+        <p class="muted">What are we finally doing in a few weeks?</p>
+
+        <div class="choices">
+          <button class="choice" data-correct="true">Meeting in Thailand <img class="flag-img" alt="Thailand" src="https://twemoji.maxcdn.com/v/latest/svg/1f1f9-1f1ed.svg"></button>
+          <button class="choice">Meeting on the moon 🌙</button>
+          <button class="choice">Meeting in 10 years 😅</button>
+        </div>
+
+        <div id="note1" class="note"></div>
+
+        <div class="footerRow">
+          <button class="btn secondary" id="back1">Back</button>
+          <button class="btn" id="next1" disabled>Next</button>
+        </div>
+      </div>
+
+      <!-- Screen: Level 2 -->
+      <div id="s2" class="screen">
+        <h2>Level 2: Catch 3 hearts 💗</h2>
+        <p class="muted">Tap/click any 3 hearts before they float away.</p>
+
+        <div class="catchArea" id="catchArea" aria-label="catch hearts area"></div>
+        <div id="note2" class="note show">Hearts caught: <b id="caught">0</b>/3</div>
+
+        <div class="footerRow">
+          <button class="btn secondary" id="back2">Back</button>
+          <button class="btn" id="next2" disabled>Next</button>
+        </div>
+      </div>
+
+      <!-- Screen: Level 3 -->
+      <div id="s3" class="screen">
+        <h2>Level 3: Find the ✈️ tile</h2>
+        <p class="muted">Flip tiles until you find the travel one.</p>
+
+        <div class="tiles" id="tiles"></div>
+        <div id="note3" class="note"></div>
+
+        <div class="footerRow">
+          <button class="btn secondary" id="back3">Back</button>
+          <button class="btn" id="next3" disabled>Next</button>
+        </div>
+      </div>
+
+      <!-- Screen: Level 4 -->
+      <div id="s4" class="screen">
+        <h2>Level 4: Finish the sentence 🥺</h2>
+        <p class="muted">When I see you in Thailand, the first thing I want to do is…</p>
+
+        <div class="choices" id="finalChoices">
+          <button class="choice" data-any="true">Smile and hug you tight</button>
+          <button class="choice" data-any="true">Take a photo we’ll keep forever</button>
+          <button class="choice" data-any="true">Tell you: “we made it.”</button>
+        </div>
+
+        <div id="note4" class="note"></div>
+
+        <div class="footerRow">
+          <button class="btn secondary" id="back4">Back</button>
+          <button class="btn" id="unlockBtn" disabled>Unlock</button>
+        </div>
+      </div>
+
+      <!-- Screen: Final -->
+      <div id="s5" class="screen">
+        <h1>Okay Vale… press play 🎥</h1>
+        <p class="muted">I made this just for you ❤️  
+						 You unlocked it by finishing all 4 hearts and there’s something waiting for you at the end.
+		</p>
+		
+		<p class="small">
+		This is a Filipino song with <b>English subtitles</b>.  
+		Please watch it in <b>full screen</b> so you can read every word properly and make sure to finish the video.  
+		There’s a <b>secret message</b> waiting for you after it ends ❤️
+		</p>
+		
+		<p class="small" id="preVideoHint" style="opacity:.85; transition: opacity 600ms ease, transform 600ms ease;">
+		Hint: This song says what I feel-wait for the end ❤️
+		</p>
+
+
+        <div class="footerRow">
+          <button class="btn" id="playBtn">▶ Play the video</button>
+          <button class="btn secondary" id="restartBtn">Play again</button>
+        </div>
+
+        <div id="videoWrap" style="display:none; margin-top:14px; position:relative; z-index:1;">
+          <div style="border-radius:18px; overflow:hidden; border:1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.65);">
+            <div id="ytPlayer" style="width:100%; aspect-ratio:16/9;"></div>
+          </div>
+
+          <!-- Hidden message (shows ONLY after video ends) -->
+          <div id="hiddenMsg" class="note" style="display:none; margin-top:10px;">
+            <b>Vale…</b> thank you for staying until the very end. 
+			I hope you felt how much love went into this. ❤️ 
+			I can’t wait to finally see you in Thailand and make real memories with you. ❤️<img class="flag-img" alt="Thailand" src="https://twemoji.maxcdn.com/v/latest/svg/1f1f9-1f1ed.svg">
+          </div>
+        </div>
+
+        <p class="small">Made with so much sweetness. See you in Thailand 💘</p>
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="card side">
+      <h2>
+        Thailand countdown
+        <img class="flag-img" alt="Thailand" src="https://twemoji.maxcdn.com/v/latest/svg/1f1f9-1f1ed.svg">
+      </h2>
+      <p class="muted">Feb 24, 2026 - the day we finally meet.</p>
+
+      <div class="countdownWrap" style="margin-top:12px">
+  <div class="countdown" style="margin-top:0">
+    <div class="cdBox"><div class="cdNum" id="cdDays">—</div><div class="cdLbl">days</div></div>
+    <div class="cdBox"><div class="cdNum" id="cdHours">—</div><div class="cdLbl">hours</div></div>
+    <div class="cdBox"><div class="cdNum" id="cdMins">—</div><div class="cdLbl">mins</div></div>
+    <div class="cdBox"><div class="cdNum" id="cdSecs">—</div><div class="cdLbl">secs</div></div>
+  </div>
+
+  <div class="note show" id="meetText" style="margin-top:12px;"></div>
+</div>
+
+      <hr style="border:none; height:1px; background: rgba(0,0,0,.08); margin:14px 0;">
+
+      <h2>Progress</h2>
+      <p class="muted">Unlock 4 hearts to reveal your video.</p>
+
+      <div class="stamps" style="margin-top:10px">
+        <div class="stamp" id="st1b">♡</div>
+        <div class="stamp" id="st2b">♡</div>
+        <div class="stamp" id="st3b">♡</div>
+        <div class="stamp" id="st4b">♡</div>
+      </div>
+
+      <p class="tiny" style="margin-top:12px">Tip: Works on phone & desktop.</p>
+    </div>
+  </div>
+
+  <script>
+  const NAME = "Vale";
+  const HINT_FADE_DELAY = 1500; // ms
+  
+  // 💖 Midnight switch flag (prevents repeat updates)
+  let midnightReached = false;
+  let countdownTimer = null;
+
+  const $ = (id) => document.getElementById(id);
+  const on = (id, evt, fn) => {
+    const el = $(id);
+    if (el) el.addEventListener(evt, fn);
+  };
+
+  function show(screenId){
+    ["cover","s0","s1","s2","s3","s4","s5"].forEach(s => {
+      const el = $(s);
+      if(el) el.classList.remove("active");
+    });
+    const next = $(screenId);
+    if(next) next.classList.add("active");
+  }
+
+  function spark(el){
+    const s = document.createElement("div");
+    s.className = "spark";
+    const icons = ["✨","💖","💫","🌸"];
+    s.textContent = icons[Math.floor(Math.random()*icons.length)];
+    s.style.left = (Math.random()*22 + 10) + "px";
+    s.style.top  = (Math.random()*14 + 8) + "px";
+    el.appendChild(s);
+    setTimeout(()=> s.remove(), 800);
+  }
+
+  function burstAt(x, y, parent){
+    for(let i = 0; i < 6; i++){
+      const s = document.createElement("div");
+      s.className = "spark";
+      const icons = ["✨","💖","💫","🌸"];
+      s.textContent = icons[Math.floor(Math.random()*icons.length)];
+      s.style.left = x + (Math.random()*24 - 12) + "px";
+      s.style.top  = y + (Math.random()*24 - 12) + "px";
+      parent.appendChild(s);
+      setTimeout(() => s.remove(), 800);
+    }
+  }
+
+  function setStamp(n, done){
+    const a = $("st"+n), b = $("st"+n+"b");
+    [a,b].forEach(st => {
+      if(!st) return;
+      st.textContent = done ? "❤️" : "♡";
+      st.classList.toggle("done", done);
+      if(done) spark(st);
+    });
+  }
+
+  function pulseOnceEnabled(btnId){
+    const btn = $(btnId);
+    if(!btn) return;
+    btn.classList.remove("beating");
+    if (!btn.disabled) btn.classList.add("beating");
+  }
+
+  const SYNC_BEAT_EVERY = 4200;
+  let syncBeatTimer = null;
+
+  function fireSyncedBeat(){
+  // Only pulse the Play button (safe even if pulseHeart doesn't exist)
+  const play = $("playBtn");
+  const s5Active = $("s5")?.classList.contains("active");
+  if (play && s5Active){
+    play.classList.remove("beat-once");
+    void play.offsetWidth;
+    play.classList.add("beat-once");
+  }
+}
+
+  function startSyncedBeats(){
+    if (syncBeatTimer) return;
+    fireSyncedBeat();
+    syncBeatTimer = setInterval(fireSyncedBeat, SYNC_BEAT_EVERY);
+  }
+
+  function stopSyncedBeats(){
+    if (!syncBeatTimer) return;
+    clearInterval(syncBeatTimer);
+    syncBeatTimer = null;
+  }
+  
+  // ✅ Progress state (required — used by save/load/reset)
+const state = { l1:false, l2:false, l3:false, l4:false, caught:0 };
+
+  function formatMeetText(target){
+  const daysTxt = $("cdDays") ? $("cdDays").textContent : "—";
+
+  const dateStr = target.toLocaleDateString(undefined, {
+    year:"numeric", month:"long", day:"numeric"
+  });
+
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "your timezone";
+
+  return `
+    Only <span style="font-weight:900">${daysTxt}</span> days until I finally see you, ${NAME} 🫶
+    <br>
+    <span style="opacity:.8">(${dateStr} • ${tz})</span>
+  `;
+}
+
+  let meetDateLocal = null;
+
+function setMeetDateFixed(){
+  // Feb 24, 2026 at 12:00 AM (midnight) in the viewer's local timezone
+  meetDateLocal = new Date(2026, 1, 24, 0, 0, 0);
+
+  const meet = $("meetText");
+  if (meet) meet.innerHTML = formatMeetText(meetDateLocal);
+}
+
+  function tickCountdown(){
+  if (!meetDateLocal) return;
+
+  const now = new Date();
+  let diff = meetDateLocal - now;
+
+  // 💖 MIDNIGHT REACHED
+  if (diff <= 0) {
+  diff = 0;
+
+  if (!midnightReached) {
+    midnightReached = true;
+
+    const d = $("cdDays"),
+          h = $("cdHours"),
+          m = $("cdMins"),
+          s = $("cdSecs"),
+          meet = $("meetText");
+
+    if (d) d.textContent = "0";
+    if (h) h.textContent = "00";
+    if (m) m.textContent = "00";
+    if (s) s.textContent = "00";
+
+    if (meet) meet.innerHTML = `
+      <b>It’s today, Vale ❤️</b><br>
+      <span style="opacity:.85">
+        The wait is finally over.  
+        I get to see you today.
+      </span>
+    `;
+
+    // 🛑 STOP the countdown forever (no resets, no ticking)
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  }
+
+  return;
+}
+
+  // ⏳ NORMAL COUNTDOWN
+  const sec = Math.floor(diff / 1000);
+  const days = Math.floor(sec / 86400);
+  const hours = Math.floor((sec % 86400) / 3600);
+  const mins = Math.floor((sec % 3600) / 60);
+  const secs = sec % 60;
+
+  const d = $("cdDays"), h = $("cdHours"), m = $("cdMins"), s = $("cdSecs");
+	if (d) d.textContent = days;
+	if (h) h.textContent = String(hours).padStart(2,"0");
+	if (m) m.textContent = String(mins).padStart(2,"0");
+	if (s) s.textContent = String(secs).padStart(2,"0");
+
+  const meet = $("meetText");
+  if (meet) meet.innerHTML = formatMeetText(meetDateLocal);
+
+}
+
+  function saveProgress(){
+    localStorage.setItem("vale_game_progress", JSON.stringify({
+      l1: state.l1, l2: state.l2, l3: state.l3, l4: state.l4
+    }));
+  }
+
+  function loadProgress(){
+    const savedProg = localStorage.getItem("vale_game_progress");
+    if(savedProg){
+      try{
+        const p = JSON.parse(savedProg);
+        state.l1 = !!p.l1; state.l2 = !!p.l2; state.l3 = !!p.l3; state.l4 = !!p.l4;
+      }catch{}
+    }
+    setStamp(1, state.l1);
+    setStamp(2, state.l2);
+    setStamp(3, state.l3);
+    setStamp(4, state.l4);
+  }
+
+  let ytPlayer = null;
+
+  let heartSpawner = null;
+
+  function resetAll(){
+    state.l1 = state.l2 = state.l3 = state.l4 = false;
+    state.caught = 0;
+
+    setStamp(1,false); setStamp(2,false); setStamp(3,false); setStamp(4,false);
+    saveProgress();
+
+    ["next1","next2","next3","unlockBtn"].forEach(id => {
+      const b = $(id);
+      if (b) {
+        b.disabled = true;
+        b.classList.remove("beating");
+      }
+    });
+
+    const caught = $("caught");
+    if (caught) caught.textContent = "0";
+
+    ["note1","note3","note4"].forEach(id => $(id)?.classList.remove("show"));
+	
+	// Clear Level 1 choice styles
+document.querySelectorAll("#s1 .choice").forEach(btn => {
+  btn.classList.remove("good", "bad");
+});
+
+// Clear Level 4 choice styles
+document.querySelectorAll("#finalChoices .choice").forEach(btn => {
+  btn.classList.remove("good");
+});
+
+const note1 = $("note1");
+if (note1) note1.innerHTML = "";
+
+const note4 = $("note4");
+if (note4) note4.innerHTML = "";
+
+    const videoWrap = $("videoWrap");
+    const hiddenMsg = $("hiddenMsg");
+    if (videoWrap) videoWrap.style.display = "none";
+    if (hiddenMsg) {
+      hiddenMsg.style.display = "none";
+      hiddenMsg.classList.remove("show");
+    }
+
+    const hint = $("preVideoHint");
+    if (hint) {
+      hint.style.display = "block";
+      hint.classList.remove("hint-fade");
+    }
+
+    stopSyncedBeats();
+
+    if (ytPlayer && typeof ytPlayer.stopVideo === "function") ytPlayer.stopVideo();
+
+    if (heartSpawner) { clearInterval(heartSpawner); heartSpawner = null; }
+    const ca = $("catchArea");
+    if (ca) ca.innerHTML = "";
+
+    const ob = $("openBtn");
+    if (ob) {
+      ob.disabled = false;
+      setTimeout(() => ob.classList.add("waiting"), 300);
+    }
+
+	 document.title = "When you’re ready 🤍";
+
+    show("cover");
+  }
+
+  function initLevel1(){
+    const s1 = $("s1");
+    if (!s1) return;
+    const choices = s1.querySelectorAll(".choice");
+    choices.forEach(btn => {
+      btn.addEventListener("click", () => {
+        choices.forEach(b => b.classList.remove("good","bad"));
+        const correct = btn.dataset.correct === "true";
+        btn.classList.add(correct ? "good" : "bad");
+
+        const note1 = $("note1");
+        if (note1) {
+          note1.classList.add("show");
+          note1.innerHTML = correct
+            ? "Correct 💗 One step closer."
+            : "Close 😅 but the real answer is the sweetest one.";
+        }
+
+        if(correct){
+          state.l1 = true; setStamp(1,true); saveProgress();
+          const next1 = $("next1");
+          if (next1) {
+            next1.disabled = false;
+            pulseOnceEnabled("next1");
+          }
+        }
+      });
+    });
+  }
+
+  function spawnHeart(){
+    const area = $("catchArea");
+    if (!area) return;
+    const h = document.createElement("div");
+    h.className = "floatHeart";
+    h.textContent = "💗";
+
+    const left = Math.random() * Math.max(1, (area.clientWidth - 30));
+    h.style.left = left + "px";
+
+    const dur = 2.6 + Math.random() * 1.6;
+    h.style.animationDuration = dur + "s";
+
+    h.addEventListener("click", () => {
+      const rect = h.getBoundingClientRect();
+      const parentRect = area.getBoundingClientRect();
+      const burstX = rect.left - parentRect.left + rect.width / 2;
+      const burstY = rect.top  - parentRect.top  + rect.height / 2;
+
+      h.remove();
+
+      state.caught += 1;
+      const caught = $("caught");
+      if (caught) caught.textContent = state.caught;
+
+      if (state.caught >= 3) {
+        burstAt(burstX, burstY, area);
+
+        state.l2 = true;
+        setStamp(2, true);
+        saveProgress();
+
+        const next2 = $("next2");
+        if (next2) {
+          next2.disabled = false;
+          pulseOnceEnabled("next2");
+        }
+
+        if (heartSpawner) { clearInterval(heartSpawner); heartSpawner = null; }
+
+        setTimeout(() => { area.innerHTML = ""; }, 650);
+      }
+    });
+
+    area.appendChild(h);
+    setTimeout(() => { if (h.parentNode) h.remove(); }, (dur * 1000) + 100);
+  }
+
+  function startCatching(){
+    state.caught = 0;
+    const caught = $("caught");
+    if (caught) caught.textContent = "0";
+    const next2 = $("next2");
+    if (next2) next2.disabled = true;
+
+    const area = $("catchArea");
+    if (!area) return;
+    area.innerHTML = "";
+
+    if (heartSpawner) { clearInterval(heartSpawner); heartSpawner = null; }
+
+    spawnHeart();
+    heartSpawner = setInterval(() => {
+      if (state.caught >= 3) {
+        clearInterval(heartSpawner);
+        heartSpawner = null;
+        return;
+      }
+      spawnHeart();
+    }, 650);
+  }
+
+  function initTiles(){
+    const icons = ["💬","⭐️","🌸","☕️","🎶","🧸","📸","🍀","✈️"];
+    for(let i=icons.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [icons[i], icons[j]] = [icons[j], icons[i]];
+    }
+
+    const grid = $("tiles");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    const next3 = $("next3");
+    if (next3) next3.disabled = true;
+
+    const note3 = $("note3");
+    if (note3) {
+      note3.classList.remove("show");
+      note3.textContent = "";
+    }
+
+    icons.forEach((icon) => {
+      const t = document.createElement("div");
+      t.className = "tile";
+      t.textContent = "❓";
+      t.dataset.icon = icon;
+
+      t.addEventListener("click", () => {
+        if(t.classList.contains("revealed")) return;
+        t.classList.add("revealed");
+        t.textContent = t.dataset.icon;
+
+        if(icon === "✈️"){
+          state.l3 = true; setStamp(3,true); saveProgress();
+          if (note3) {
+            note3.classList.add("show");
+            note3.innerHTML = "You found it ✈️ We’re really doing this.";
+          }
+          if (next3) {
+            next3.disabled = false;
+            pulseOnceEnabled("next3");
+          }
+        }
+      });
+
+      grid.appendChild(t);
+    });
+  }
+
+  function initFinalChoices(){
+    const fc = $("finalChoices");
+    if (!fc) return;
+    const btns = fc.querySelectorAll(".choice");
+    btns.forEach(b => {
+      b.addEventListener("click", () => {
+        btns.forEach(x => x.classList.remove("good"));
+        b.classList.add("good");
+
+        const note4 = $("note4");
+        if (note4) {
+          note4.classList.add("show");
+          note4.innerHTML = "Yes 🥺 That’s exactly the vibe.";
+        }
+
+        state.l4 = true; setStamp(4,true); saveProgress();
+
+        const unlockBtn = $("unlockBtn");
+        if (unlockBtn) {
+          unlockBtn.disabled = false;
+          pulseOnceEnabled("unlockBtn");
+        }
+      });
+    });
+  }
+
+  let ytApiPromise = null;
+
+  function loadYouTubeAPI(){
+    if (ytApiPromise) return ytApiPromise;
+
+    ytApiPromise = new Promise((resolve, reject) => {
+      if (window.YT && window.YT.Player) return resolve();
+
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      tag.async = true;
+
+      window.onYouTubeIframeAPIReady = () => resolve();
+      tag.onerror = () => reject(new Error("YouTube API failed to load"));
+      document.head.appendChild(tag);
+    });
+
+    return ytApiPromise;
+  }
+
+  function createOrLoadPlayer(){
+    const videoId = "D4qPCR1dmNE";
+
+    if (ytPlayer) {
+      ytPlayer.loadVideoById(videoId);
+      return;
+    }
+
+    ytPlayer = new YT.Player("ytPlayer", {
+      videoId,
+      playerVars: { autoplay: 1, rel: 0, modestbranding: 1, playsinline: 1 },
+      events: {
+        onStateChange: (e) => {
+          if (e.data === YT.PlayerState.ENDED) {
+            const hidden = $("hiddenMsg");
+            if (hidden) {
+              hidden.style.display = "block";
+              hidden.classList.add("show");
+            }
+			document.title = "That’s my heart ❤️";
+          }
+        }
+      }
+    });
+  }
+
+  function wireNav(){
+    on("openBtn", "click", () => {
+      const ob = $("openBtn");
+      if (!ob) return;
+
+      ob.classList.remove("waiting");
+      ob.disabled = true;
+	  
+	  document.title = "I’m glad it’s you ❤️";
+
+      const c = $("cover");
+      if (!c) return;
+
+      c.classList.add("fade-out");
+      setTimeout(() => {
+        c.classList.remove("fade-out");
+        show("s0");
+        startSyncedBeats();
+      }, 520);
+    });
+
+    on("startBtn", "click", () => show("s1"));
+    on("resetBtn", "click", resetAll);
+
+    on("back1", "click", () => show("s0"));
+    on("next1", "click", () => { show("s2"); startCatching(); });
+
+    on("back2", "click", () => {
+      show("s1");
+      if(heartSpawner){ clearInterval(heartSpawner); heartSpawner=null; }
+    });
+
+    on("next2", "click", () => { show("s3"); initTiles(); });
+
+    on("back3", "click", () => show("s2"));
+    on("next3", "click", () => show("s4"));
+
+    on("back4", "click", () => show("s3"));
+    on("unlockBtn", "click", () => show("s5"));
+
+    on("playBtn", "click", async () => {
+      const videoWrap = $("videoWrap");
+      const hiddenMsg = $("hiddenMsg");
+      if (videoWrap) videoWrap.style.display = "block";
+      if (hiddenMsg) {
+        hiddenMsg.style.display = "none";
+        hiddenMsg.classList.remove("show");
+      }
+
+      const hint = $("preVideoHint");
+      if (hint) {
+        hint.style.display = "block";
+        hint.classList.remove("hint-fade");
+        setTimeout(() => {
+          hint.classList.add("hint-fade");
+          setTimeout(() => hint.style.display = "none", 950);
+        }, HINT_FADE_DELAY);
+      }
+
+      try {
+        await loadYouTubeAPI();
+        createOrLoadPlayer();
+      } catch (err) {
+        console.error(err);
+        alert("Video failed to load. Please refresh and try again.");
+      }
+    });
+
+    on("restartBtn", "click", resetAll);
+  }
+
+  window.addEventListener("load", () => {
+    document.body.classList.add("page-loaded");
+
+    setMeetDateFixed();
+    loadProgress();
+    initLevel1();
+    initFinalChoices();
+    wireNav();
+    tickCountdown();
+    countdownTimer = setInterval(tickCountdown, 1000);
+
+    setTimeout(() => {
+      const btn = $("openBtn");
+      if (btn && !btn.disabled) btn.classList.add("waiting");
+    }, 1000);
+  });
+</script>
+</body>
+</html>
